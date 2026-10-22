@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JASA EDIT POSTER MLBB -- MIKU STORE ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0b10;
+            --primary: #00f3ff;
+            --secondary: #bd00ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: white;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(189, 0, 255, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.15), transparent 25%),
+                linear-gradient(rgba(10, 11, 16, 0.55), rgba(10, 11, 16, 0.55)), /* lapisan gelap agar teks tetap jelas */
+                url('background.png');
+            background-size: auto, auto, auto, cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(10, 11, 16, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .logo span { color: var(--primary); }
+
+        /* Banner 16:9 */
+        .banner-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding: 0 5%;
+        }
+
+        .banner-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+            position: relative;
+            background-color: #111;
+        }
+
+        .banner-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s ease;
+        }
+
+        .banner-wrapper:hover img { transform: scale(1.05); }
+
+        /* Teks Sambutan */
+        .hero {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p { color: #a0a0a0; font-size: 1.1rem; }
+
+        /* Tombol Filter Harga */
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-filter {
+            padding: 8px 15px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #a0a0a0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-filter:hover { border-color: var(--primary); color: var(--primary); }
+
+        .btn-filter.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        /* Gallery Grid */
+        .gallery-container { padding: 0 5% 80px; }
+
+        .gallery {
+            columns: 250px;        /* masonry: tiap gambar tinggi sesuai aslinya */
+            column-gap: 25px;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: 0.4s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.5s ease;
+            width: 100%;
+            min-width: 0;
+            break-inside: avoid;
+            margin-bottom: 25px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .img-wrap {
+            width: 100%;
+            min-height: 300px; /* placeholder saat gambar belum termuat */
+            background: linear-gradient(45deg, #0f1118, #1a1c29);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .img-wrap.loaded { min-height: 0; }
+
+        .card-img {
+            width: 100%;
+            height: auto;          /* ukuran mengikuti gambar asli */
+            object-fit: contain;   /* gambar tidak terpotong */
+            display: block;
+        }
+
+        .card-content {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            margin-top: auto;
+            gap: 10px;
+        }
+
+        .price {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .btn-buy {
+            padding: 8px 15px;
+            background: var(--primary);
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-buy:hover { background: var(--secondary); color: #fff; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .btn-filter { padding: 6px 12px; font-size: 0.8rem; }
+            .gallery { columns: 1; }
+        }
+
+
+        /* Animasi progres download */
+        .loader {
+            column-span: all;
+            max-width: 420px;
+            margin: 60px auto;
+            padding: 28px 24px;
+            text-align: center;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
+        }
+
+        .loader-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            margin-bottom: 18px;
+        }
+
+        .loader-title .dots::after {
+            content: '';
+            animation: dots 1.2s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%   { content: ''; }
+            25%  { content: '.'; }
+            50%  { content: '..'; }
+            75%  { content: '...'; }
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            position: relative;
+            width: 0%;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.6);
+            transition: width 0.4s ease;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 1.2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { transform: translateX(100%); }
+        }
+
+        .loader-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #a0a0a0;
+        }
+
+        .loader-percent {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            font-weight: 700;
+        }
+
+
+        /* Poster bisa diklik */
+        .img-wrap { cursor: zoom-in; }
+
+        /* Modal catatan */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+        }
+
+        .modal.open { display: flex; animation: fadeIn 0.25s ease; }
+
+        .modal-box {
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: #0d0f17;
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            padding: 20px;
+        }
+
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            width: 34px;
+            height: 34px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .modal-close:hover { border-color: var(--primary); color: var(--primary); }
+
+        .modal-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+
+        .note-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin: 14px 0 8px;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+        }
+
+        .note-list { list-style: none; }
+
+        .note-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 12px;
+            margin-bottom: 6px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .note-list li b { color: var(--primary); font-family: 'Orbitron', sans-serif; font-weight: 700; }
+
+        .tutor-list { padding-left: 22px; font-size: 0.9rem; line-height: 1.7; color: #d0d0d0; }
+
+        .modal-order {
+            display: block;
+            margin-top: 18px;
+            padding: 12px;
+            text-align: center;
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .modal-order:hover { background: var(--secondary); color: #fff; }
+
+        .empty-state {
+            text-align: center;
+            column-span: all;
+            padding: 50px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">MIKU STORE<span> ID</span></div>
+    </nav>
+
+    <div class="banner-container">
+        <div class="banner-wrapper">
+            <img src="banner.png" alt="Banner MLBB Edit" onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <div class="filter-controls" id="filters">
+    <button class="btn-filter active" onclick="filterGallery('all', this)">Semua</button>
+        <button class="btn-filter" data-price="6000">6.000</button>
+        <button class="btn-filter" data-price="10000">10.000</button>
+        <button class="btn-filter" data-price="12000">12.000</button>
+        <button class="btn-filter" data-price="15000">15.000</button>
+        <button class="btn-filter" data-price="20000">20.000</button>
+        <button class="btn-filter" data-price="25000">25.000</button>
+        <button class="btn-filter" data-price="30000">30.000</button>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery" id="gallery">
+            <!-- Data akan dimuat di sini -->
+        </div>
+    </div>
+
+
+    <div class="modal" id="modal" aria-hidden="true">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-label="Catatan order">
+            <button class="modal-close" id="modalClose" aria-label="Tutup">&times;</button>
+            <img id="modalImg" class="modal-img" alt="">
+
+            <div class="note-title">💰 Harga &amp; Slot Skin</div>
+            <ul class="note-list">
+                <li><span id="modalPrice">💰 -</span><b id="modalSlot">- slot skin</b></li>
+            </ul>
+
+            <div class="note-title">📝 Tutor</div>
+            <ol class="tutor-list">
+                <li>SS jumlah skin yang diminta di dalam poster</li>
+                <li>SS WR akun</li>
+                <li>SS Profil akun</li>
+                <li>SS Recall</li>
+                <li>SS point koleksi</li>
+                <li>Sebut nama/watermark yang akan digunakan</li>
+                <li>Sebut juga gambar skin untuk jadi background</li>
+            </ol>
+
+            <a id="modalOrder" class="modal-order" href="#" target="_blank" rel="noopener">Order Now</a>
+        </div>
+    </div>
+
+    <script>
+        // JANGAN LUPA GANTI NOMOR WA DI BAWAH INI (Awalan 62)
+        const WA_NUMBER = "6285823103767";
+
+        const priceData = [
+            { folder: '6K', price: 6000 },
+            { folder: '10K', price: 10000 },
+            { folder: '12K', price: 12000 },
+            { folder: '15K', price: 15000 },
+            { folder: '20K', price: 20000 },
+            { folder: '25K', price: 25000 },
+            { folder: '30K', price: 30000 }
+        ];
+
+        // Ekstensi yang dicoba untuk setiap nomor (1, 2, 3, ...)
+        const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'PNG', 'JPG', 'JPEG'];
+        const BATCH = 10; // berhenti jika 10 nomor berturut-turut tidak ada gambar
+
+        // Jumlah slot skin untuk setiap harga
+        const SLOT_DATA = {
+            6000: 34,
+            10000: 57,
+            12000: 73,
+            15000: 98,
+            20000: 138,
+            25000: 177,
+            30000: 205
+        };
+
+        const gallery = document.getElementById('gallery');
+        let allPosters = [];
+
+        function rupiah(n) {
+            return 'Rp ' + Number(n).toLocaleString('id-ID');
+        }
+
+        function probe(src) {
+            return new Promise(resolve => {
+                const im = new Image();
+                im.onload = () => resolve(src);
+                im.onerror = () => resolve(null);
+                im.src = src;
+            });
+        }
+
+        async function probeNumber(folder, n) {
+            const results = await Promise.all(
+                EXTENSIONS.map(ext => probe(`tamp1/${folder}/${n}.${ext}`))
+            );
+            return results.find(Boolean) || null;
+        }
+
+        async function scanFolder(item, onBatch) {
+            const found = [];
+            for (let start = 1; start <= 500; start += BATCH) {
+                const nums = Array.from({ length: BATCH }, (_, i) => start + i);
+                const res = await Promise.all(nums.map(n => probeNumber(item.folder, n)));
+                const hits = res.filter(Boolean);
+                if (!hits.length) break;
+                hits.forEach(src => found.push({ image: src, folder: item.folder, price: item.price }));
+                onBatch(item.folder, Math.ceil(start / BATCH), found.length, false);
+            }
+            onBatch(item.folder, 0, found.length, true);
+            return found;
+        }
+
+        // ---- Animasi progres download ----
+        let shownPercent = 0, targetPercent = 0;
+
+        function showLoader() {
+            gallery.innerHTML = `
+                <div class="loader">
+                    <div class="loader-title">Mengunduh editan<span class="dots"></span></div>
+                    <div class="progress-track"><div class="progress-bar" id="pBar"></div></div>
+                    <div class="loader-info">
+                        <span id="pCount">0 gambar ditemukan</span>
+                        <span class="loader-percent" id="pPercent">0%</span>
+                    </div>
+                </div>`;
+            shownPercent = 0;
+            targetPercent = 0;
+            tickPercent();
+        }
+
+        function tickPercent() {
+            const bar = document.getElementById('pBar');
+            const txt = document.getElementById('pPercent');
+            if (!bar || !txt) return;
+            shownPercent += (targetPercent - shownPercent) * 0.12;
+            if (targetPercent - shownPercent < 0.3) shownPercent = targetPercent;
+            bar.style.width = shownPercent + '%';
+            txt.textContent = Math.round(shownPercent) + '%';
+            if (shownPercent < 100) requestAnimationFrame(tickPercent);
+        }
+
+        async function loadPosters() {
+            const state = {};
+            priceData.forEach(i => state[i.folder] = { p: 0, n: 0 });
+
+            const onBatch = (folder, batches, count, done) => {
+                // batch yang sudah dipindai -> progres mendekati (tapi tidak mencapai) 90%
+                state[folder].p = done ? 1 : Math.min(0.9, batches / (batches + 2));
+                state[folder].n = count;
+                const total = Object.values(state).reduce((a, v) => a + v.p, 0) / priceData.length;
+                const found = Object.values(state).reduce((a, v) => a + v.n, 0);
+                targetPercent = Math.max(targetPercent, Math.min(99, total * 100));
+                const c = document.getElementById('pCount');
+                if (c) c.textContent = found + ' gambar ditemukan';
+                tickPercent();
+            };
+
+            const perFolder = await Promise.all(priceData.map(i => scanFolder(i, onBatch)));
+            allPosters = perFolder.flat();
+
+            // selesai: isi sampai 100% sebentar sebelum menampilkan galeri
+            targetPercent = 100;
+            tickPercent();
+            await new Promise(r => setTimeout(r, 600));
+        }
+
+        // Hapus card utuh jika gambarnya tidak ditemukan,
+        // supaya tidak ada kotak kosong yang hanya berisi harga + tombol.
+        function removeCard(img) {
+            const card = img.closest('.card');
+            if (card) card.remove();
+            if (!gallery.querySelector('.card')) {
+                gallery.innerHTML = '<div class="empty-state">Belum ada editan untuk harga ini.</div>';
+            }
+        }
+
+        function waLinkFor(post) {
+            const pesan = `Hai Bang Miku Store! Saya mau order jasa edit poster MLBB\n\n*Harga:* ${rupiah(post.price)}\n*Slot Skin:* ${SLOT_DATA[post.price]}\n*Kategori Folder:* ${post.folder}\n*Nama File:* ${post.image.split('/').pop()}`;
+            return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(pesan)}`;
+        }
+
+        // ---- Modal catatan saat poster diklik ----
+        const modal = document.getElementById('modal');
+
+        function openModal(post) {
+            document.getElementById('modalImg').src = post.image;
+            document.getElementById('modalOrder').href = waLinkFor(post);
+            document.getElementById('modalPrice').textContent = '💰 ' + rupiah(post.price);
+            document.getElementById('modalSlot').textContent = SLOT_DATA[post.price] + ' slot skin';
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        gallery.addEventListener('click', (e) => {
+            const wrap = e.target.closest('.img-wrap');
+            if (!wrap) return;
+            const card = wrap.closest('.card');
+            openModal({
+                image: card.dataset.image,
+                folder: card.dataset.folder,
+                price: Number(card.dataset.price)
+            });
+        });
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        function renderCards(list) {
+            if (!list.length) {
+                gallery.innerHTML = '<div class="empty-state">Belum ada editan untuk harga ini.</div>';
+                return;
+            }
+
+            gallery.innerHTML = list.map(post => {
+                const waLink = waLinkFor(post);
+
+                return `
+                    <div class="card" data-image="${post.image}" data-folder="${post.folder}" data-price="${post.price}">
+                        <div class="img-wrap">
+                            <img src="${post.image}" alt="" class="card-img" loading="lazy"
+                                 onload="this.parentElement.classList.add('loaded')"
+                                 onerror="removeCard(this)">
+                        </div>
+                        <div class="card-content">
+                            <div class="price">${rupiah(post.price)}</div>
+                            <a href="${waLink}" target="_blank" rel="noopener" class="btn-buy">Order Now</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('filters').addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-filter');
+            if (!btn) return;
+
+            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const harga = btn.dataset.price;
+            if (harga === 'all') {
+                renderCards(allPosters);
+            } else {
+                renderCards(allPosters.filter(p => p.price === Number(harga)));
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            showLoader();
+            await loadPosters();
+            renderCards(allPosters);
+        });
+    </script>
+</body>
+</html>
